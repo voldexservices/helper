@@ -59,13 +59,9 @@
     </properties>
 
     <distributionManagement>
-        <snapshotRepository>
-            <id>luck-snapshots</id>
-            <url>https://nexus.lucko.me/repository/maven-snapshots/</url>
-        </snapshotRepository>
         <repository>
-            <id>luck-releases</id>
-            <url>https://nexus.lucko.me/repository/maven-releases/</url>
+            <id>voldex-repo</id>
+            <url>https://m2.voldex.net/repository/voldex-deploy</url>
         </repository>
     </distributionManagement>
 

@@ -76,6 +76,7 @@ public interface ScoreboardObjective {
      */
     void setDisplayName(String displayName);
 
+    void setDisplayNameJson(String displayNameJson);
     /**
      * Gets the current display slot of this objective
      *

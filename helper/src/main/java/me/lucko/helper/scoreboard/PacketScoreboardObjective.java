@@ -84,6 +84,7 @@ public class PacketScoreboardObjective implements ScoreboardObjective {
 
     // the current display name
     private String displayName;
+    private boolean isDisplayNameJson;
     // the current display slot
     private DisplaySlot displaySlot;
 
@@ -100,6 +101,7 @@ public class PacketScoreboardObjective implements ScoreboardObjective {
         Preconditions.checkArgument(id.length() <= 16, "id cannot be longer than 16 characters");
 
         this.id = id;
+        this.isDisplayNameJson = false;
         this.displayName = trimName(Text.colorize(Objects.requireNonNull(displayName, "displayName")));
         this.displaySlot = Objects.requireNonNull(displaySlot, "displaySlot");
         this.autoSubscribe = autoSubscribe;
@@ -139,12 +141,25 @@ public class PacketScoreboardObjective implements ScoreboardObjective {
     @Override
     public void setDisplayName(String displayName) {
         Objects.requireNonNull(displayName, "displayName");
+
         displayName = trimName(Text.colorize(displayName));
         if (this.displayName.equals(displayName)) {
             return;
         }
+        this.isDisplayNameJson = false;
 
         this.displayName = displayName;
+        Protocol.broadcastPacket(this.subscribed, newObjectivePacket(UpdateType.UPDATE));
+    }
+
+    @Override
+    public void setDisplayNameJson(String displayNameJson) {
+        Objects.requireNonNull(displayNameJson, "displayNameJson");
+        if (this.displayName.equals(displayNameJson)) {
+            return;
+        }
+        this.isDisplayNameJson = true;
+        this.displayName = displayNameJson;
         Protocol.broadcastPacket(this.subscribed, newObjectivePacket(UpdateType.UPDATE));
     }
 
@@ -294,7 +309,7 @@ public class PacketScoreboardObjective implements ScoreboardObjective {
 
         if (USING_CHAT_COMPONENTS) {
             // set display name - Component
-            packet.getChatComponents().write(0, PacketScoreboard.toComponent(getDisplayName()));
+            packet.getChatComponents().write(0, isDisplayNameJson?PacketScoreboard.fromJson(getDisplayName()):PacketScoreboard.toComponent(getDisplayName()));
         } else {
             // set display name - limited to String(16) - Only if mode is 0 or 2. The text to be displayed for the score
             packet.getStrings().write(1, getDisplayName());

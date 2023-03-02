@@ -74,6 +74,8 @@ public interface ScoreboardTeam {
      */
     void setDisplayName(String displayName);
 
+    void setDisplayNameJson(String displayNameJson);
+
     /**
      * Gets the current prefix for this team
      *
@@ -88,6 +90,8 @@ public interface ScoreboardTeam {
      */
     void setPrefix(String prefix);
 
+    void setPrefixJson(String prefixJson);
+
     /**
      * Gets the current suffix for this team
      *
@@ -101,6 +105,8 @@ public interface ScoreboardTeam {
      * @param suffix the new suffix
      */
     void setSuffix(String suffix);
+
+    void setSuffixJson(String suffixJson);
 
     /**
      * Gets if friendly fire is allowed

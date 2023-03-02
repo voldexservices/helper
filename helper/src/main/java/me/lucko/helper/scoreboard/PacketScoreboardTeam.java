@@ -98,10 +98,13 @@ public class PacketScoreboardTeam implements ScoreboardTeam {
 
     // the current display name
     private String displayName;
+    private boolean isDisplayNameJson = false;
     // the current prefix
     private String prefix = "";
+    private boolean isPrefixJson = false;
     // the current suffix
     private String suffix = "";
+    private boolean isSuffixJson = false;
     // if friendly fire is allowed
     private boolean allowFriendlyFire = true;
     // if members of this team can see invisible members on the same team
@@ -168,6 +171,19 @@ public class PacketScoreboardTeam implements ScoreboardTeam {
         }
 
         this.displayName = displayName;
+        this.isDisplayNameJson = false;
+        Protocol.broadcastPacket(this.subscribed, newUpdatePacket());
+    }
+
+    @Override
+    public void setDisplayNameJson(String displayNameJson) {
+        Objects.requireNonNull(displayNameJson, "displayNameJson");
+        if (this.displayName.equals(displayNameJson)) {
+            return;
+        }
+
+        this.displayName = displayNameJson;
+        this.isDisplayNameJson = true;
         Protocol.broadcastPacket(this.subscribed, newUpdatePacket());
     }
 
@@ -185,6 +201,19 @@ public class PacketScoreboardTeam implements ScoreboardTeam {
         }
 
         this.prefix = prefix;
+        this.isPrefixJson = false;
+        Protocol.broadcastPacket(this.subscribed, newUpdatePacket());
+    }
+
+    @Override
+    public void setPrefixJson(String prefixJson) {
+        Objects.requireNonNull(prefixJson, "prefixJson");
+        if (this.prefix.equals(prefixJson)) {
+            return;
+        }
+
+        this.prefix = prefixJson;
+        this.isPrefixJson = true;
         Protocol.broadcastPacket(this.subscribed, newUpdatePacket());
     }
 
@@ -202,6 +231,18 @@ public class PacketScoreboardTeam implements ScoreboardTeam {
         }
 
         this.suffix = suffix;
+        this.isSuffixJson = false;
+        Protocol.broadcastPacket(this.subscribed, newUpdatePacket());
+    }
+
+    public void setSuffixJson(String suffixJson){
+        Objects.requireNonNull(suffixJson, "suffixJson");
+        if (this.suffix.equals(suffixJson)) {
+            return;
+        }
+
+        this.suffix = suffixJson;
+        this.isSuffixJson = true;
         Protocol.broadcastPacket(this.subscribed, newUpdatePacket());
     }
 
@@ -394,13 +435,13 @@ public class PacketScoreboardTeam implements ScoreboardTeam {
 
         if (GTEQ_1_13) {
             // set display name - Component
-            struct.getChatComponents().write(0, PacketScoreboard.toComponent(getDisplayName()));
+            struct.getChatComponents().write(0, isDisplayNameJson?PacketScoreboard.fromJson(getDisplayName()):PacketScoreboard.toComponent(getDisplayName()));
 
             // set prefix - Component
-            struct.getChatComponents().write(1, PacketScoreboard.toComponent(getPrefix()));
+            struct.getChatComponents().write(1, isPrefixJson?PacketScoreboard.fromJson(getPrefix()):PacketScoreboard.toComponent(getPrefix()));
 
             // set suffix - Component
-            struct.getChatComponents().write(2, PacketScoreboard.toComponent(getSuffix()));
+            struct.getChatComponents().write(2, isSuffixJson?PacketScoreboard.fromJson(getSuffix()):PacketScoreboard.toComponent(getSuffix()));
         } else {
             // set display name - String(32)
             struct.getStrings().write(1, getDisplayName());
