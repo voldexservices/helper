@@ -32,6 +32,7 @@ import me.lucko.helper.messaging.AbstractMessenger;
 import me.lucko.helper.messaging.Channel;
 import me.lucko.helper.redis.Redis;
 import me.lucko.helper.redis.RedisCredentials;
+import me.lucko.helper.redis.WrappedJedis;
 import me.lucko.helper.terminable.composite.CompositeTerminable;
 import me.lucko.helper.utils.Log;
 
@@ -58,8 +59,10 @@ public class HelperRedis implements Redis {
     private final CompositeTerminable registry = CompositeTerminable.create();
 
     private PubSubListener listener = null;
+    private HelperRedisPlugin plugin;
 
-    public HelperRedis(@Nonnull RedisCredentials credentials) {
+    public HelperRedis(HelperRedisPlugin plugin, @Nonnull RedisCredentials credentials) {
+        this.plugin = plugin;
         JedisPoolConfig config = new JedisPoolConfig();
         config.setMaxTotal(16);
 
@@ -151,7 +154,7 @@ public class HelperRedis implements Redis {
     @Nonnull
     @Override
     public Jedis getJedis() {
-        return getJedisPool().getResource();
+        return new WrappedJedis(plugin,getJedisPool().getResource());
     }
 
     @Override

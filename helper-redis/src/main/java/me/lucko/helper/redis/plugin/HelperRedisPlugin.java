@@ -61,7 +61,7 @@ public class HelperRedisPlugin extends ExtendedJavaPlugin implements RedisProvid
     @Nonnull
     @Override
     public Redis getRedis(@Nonnull RedisCredentials credentials) {
-        return new HelperRedis(credentials);
+        return new HelperRedis(this, credentials);
     }
 
     @Nonnull
