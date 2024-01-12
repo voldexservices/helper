@@ -35,7 +35,7 @@ import java.util.Set;
 
 /**
  * An emumeration of NMS versions.
- *
+ * <p>
  * Taken from <a href="https://www.spigotmc.org/wiki/spigot-nms-and-minecraft-versions/">here</a>,
  */
 public enum NmsVersion {
@@ -125,7 +125,14 @@ public enum NmsVersion {
             MinecraftVersion.of(1, 19, 0),
             MinecraftVersion.of(1, 19, 1),
             MinecraftVersion.of(1, 19, 2)
-    );
+    ),
+    v1_20_R1(
+            MinecraftVersion.of(1, 20, 0),
+            MinecraftVersion.of(1, 20, 1),
+            MinecraftVersion.of(1, 20, 3),
+            MinecraftVersion.of(1, 20, 4)
+    )
+    ;
 
     private final Set<MinecraftVersion> minecraftVersions;
 
